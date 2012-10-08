@@ -1,0 +1,8 @@
+extends layout
+
+
+block content
+  h2 SQL testing. Records list
+
+  each obj in records
+    li #{obj.id}: #{obj.name}
