@@ -6,7 +6,8 @@ global.BirdSchema = new mongoose.Schema({
     family : {type:String, required : true, match : /^[\s\S]{0,50}$/},
     genus : {type:String, required : true, match : /^[\s\S]{0,50}$/},
     subgenus : {type:String, required : true, match : /^[\s\S]{0,50}$/}, 
-    species : {type:String, required : true, match : /^[\s\S]{0,50}$/}  
+    species : {type:String, required : true, match : /^[\s\S]{0,50}$/},
+    image : String
 });
 
 mongoose.model('Bird', BirdSchema);

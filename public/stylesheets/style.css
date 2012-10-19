@@ -6,3 +6,18 @@ body {
 a {
   color: #00B7FF;
 }
+
+.birdBlock {
+    border : 1px gray dotted;
+    width : 200px;
+    height : 250px;
+    overflow : hidden;
+    float : left;
+    padding : 5px;
+    margin : 3px;
+}
+
+.birdBlock:hover {
+    background-color : #f0f0fc;
+}
+
