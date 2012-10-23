@@ -1,7 +1,6 @@
 require('../models/bird');
 var fs = require('fs'),
 idgen = require('idgen'),
-gm = require('gm'),
 im = require('imagemagick');
 
 Array.prototype.contains = function(obj) {
