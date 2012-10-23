@@ -15,7 +15,7 @@ Array.prototype.contains = function(obj) {
 
 isValidImageExt = function(ext)
 {
-   return ['jpg','jpeg', 'gif', 'png'].contains(ext); 
+    return ['jpg','jpeg', 'gif', 'png'].contains(ext); 
 }
 
 
@@ -33,12 +33,11 @@ exports.add = function(req, res){
                         
     fName += '.'+ext;
     
-    if(!isValidImageExt(ext))
-        fName = '';                    
+    if(isValidImageExt(ext)){
+        placeImage( req.files.img.path, fName, req.body.gravity, item.image );
+        item.image = fName;
+    }                   
     
-    placeImage(req.files.img.path, fName, req.body.gravity, fName);
-                    
-    bird.image = fName;    
 
     bird.save(function(err,item){
         if(err){
@@ -137,7 +136,7 @@ exports.del = function(req, res){
 
 placeImage = function(fileName, storeName, gravity, oldName){
     
-    if(fileName && fileName!='' && storeName){
+    if(fileName && fileName!='' && storeName && storeName!=''){
         im.convert([fileName, 
             //                        '-resize', '50%', 
             //                        '-crop', '200x100+0+0',
@@ -158,16 +157,16 @@ placeImage = function(fileName, storeName, gravity, oldName){
                     throw err;
                 }
                 fs.rename(fileName, __dirname+'/../public/images/birds/'+storeName);
-            //delete prev files
+                //delete prev files
+                if(oldName){
+                    fs.unlink(__dirname+'/../public/images/birds/'+oldName, function(err){});
+                    fs.unlink(__dirname+'/../public/images/birds/th_'+oldName, function(err){});    
+                }
                     
                             
             });
     }
         
-    if(oldName){
-        fs.unlink(__dirname+'/../public/images/birds/'+oldName, function(err){});
-        fs.unlink(__dirname+'/../public/images/birds/th_'+oldName, function(err){});    
-    }
 }
 
 exports.edit = function(req, res){
@@ -199,14 +198,10 @@ exports.edit = function(req, res){
                     fName += '.'+ext;
                     
                     
-                    if(!isValidImageExt(ext))
-                        fName = '';
-                    
-                    placeImage( req.files.img.path, fName, req.body.gravity, item.image );
-                    
-
-                    
-                    item.image = fName;
+                    if(isValidImageExt(ext)){
+                        placeImage( req.files.img.path, fName, req.body.gravity, item.image );
+                        item.image = fName;
+                    }
                         
                     item.save(function(){
                         res.redirect('/'/*+item._id.toHexString()*/);
