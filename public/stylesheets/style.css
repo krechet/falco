@@ -15,9 +15,40 @@ a {
     float : left;
     padding : 5px;
     margin : 3px;
+    position : relative;
+    font-size: 11px
 }
 
 .birdBlock:hover {
     background-color : #f0f0fc;
 }
 
+.birdBlock:hover .itemOps {
+    display: block;
+}
+
+.itemOps {
+ 
+    font-size: 10px; height:16px; width:50px; position:absolute; left:150px; top:0; z-index:2;
+    display : none;
+}
+
+.birdName{
+    font-size: 12px; 
+    font-weight: bold;
+    height:16px; 
+    width:100px; 
+    position:absolute; 
+    left:95px; 
+    top:110px; 
+    z-index:3;
+    text-align: right;
+}
+
+.birdProps {
+    margin :20px auto;
+}
+
+.itemOps a {
+    margin-right:3px;
+}

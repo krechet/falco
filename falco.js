@@ -71,13 +71,18 @@ function requireRole(role) {
 
 app.get('/', routes.index);
 
+app.del('/birds/:id', requireRole('admin'), birds.del);
+
+
+
 app.post('/birds', requireRole('admin'), birds.add);
 app.put('/birds/:id', requireRole('admin'), birds.edit);
-app.del('birds/:id', requireRole('admin'), birds.del);
+
 app.get('/birds/new', requireRole('admin'), birds.newForm);
 app.get('/birds/:id/edit', requireRole('admin'), birds.editForm);
 app.get('/birds/:id', birds.get);
 app.get('/birds', birds.getAll);
+
 
 
 app.post('/login',

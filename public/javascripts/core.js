@@ -10,7 +10,9 @@ BirdModel = Backbone.Model.extend({
         family : '',
         species : '',
         image : ''
-    }
+    },
+    
+    idAttribute : '_id'
 });
 
 BirdsCollection = Backbone.Collection.extend({
@@ -28,13 +30,35 @@ BirdView = Backbone.View.extend({
     tagName : 'div',
     className : 'birdBlock',
     model : BirdModel,
-    tpl : _.template("<p><img src='/images/birds/th_<%= image %>'></p>\
-        <p><%= name %></p>\
-        <p><%= order %></p>\
-        <p><%= family %></p>\
-        <p><%= genus %></p>\
-        <p><%= subgenus %></p>\
-        <p><%= species %></p>\
+    
+    events : {
+        'click .delBird' : function(){ 
+            if(confirm('Delete?')){
+                this.model.destroy();
+                this.remove();
+            }
+        }
+    },
+    
+    init : function(){
+/*        this.model.on('destroy', function(){
+            console.log('removing element');
+            this.remove();
+        });*/
+    },
+    
+    tpl : _.template("<div style='height:120; width:200;background:url(/images/birds/th_<%= image %>) no-repeat'><img style='z-index:100' src='/images/frame120.png'></div>\
+        <table class='birdProps'>\
+        <tr><td>Order</td><td><%= order %></td></tr>\
+        <tr><td>Family</td><td><%= family %></td></tr>\
+        <tr><td>Genus</td><td><%= genus %></td></tr>\
+        <tr><td>Subgenus</td><td><%= subgenus %></td></tr>\
+        <tr><td>Species</td><td><%= species %></td></tr></table>\
+        <div class='itemOps'>\
+<a href='javascript:void(0)' class='delBird'>del</a>\
+<a href='/birds/<%= _id %>/edit' class='editlBird'>edt</a>\
+    </div>\
+    <div class='birdName'><%= name %></div>\
         "
         ),
     
@@ -47,9 +71,15 @@ BirdView = Backbone.View.extend({
 BirdsView = Backbone.View.extend({
     el : '#birdsContainer',
     
+
+    
     init : function(){
         _.bindAll(this,'render');
+        
+//        this.on('click .delBird', function(){ console.log('del');})
     },
+    
+    
     
     render : function(){
         _(app.birds.models).each(function(item){
