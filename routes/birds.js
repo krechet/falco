@@ -137,6 +137,14 @@ exports.del = function(req, res){
 placeImage = function(fileName, storeName, gravity, oldName){
     
     if(fileName && fileName!='' && storeName && storeName!=''){
+        
+        
+/*        fs.exists(__dirname + '/../public/images/birds',function(exists){
+            if(!exists){
+                fs.mkdir(__dirname+'/../public/images/birds2');
+            }
+        });
+  */     fs.mkdir(__dirname+'/../public/images/birds', function(err){}); 
         im.convert([fileName, 
             //                        '-resize', '50%', 
             //                        '-crop', '200x100+0+0',
@@ -196,7 +204,6 @@ exports.edit = function(req, res){
                     var ext = match[1];
                         
                     fName += '.'+ext;
-                    
                     
                     if(isValidImageExt(ext)){
                         placeImage( req.files.img.path, fName, req.body.gravity, item.image );
