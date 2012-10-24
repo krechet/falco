@@ -13,4 +13,5 @@ results
 
 public/images/birds
 node_modules/express
+node_modules/n
 npm-debug.log
