@@ -11,5 +11,6 @@ pids
 logs
 results
 
+public/images/birds
 node_modules/express
 npm-debug.log
