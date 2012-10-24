@@ -94,6 +94,12 @@ BirdsView = Backbone.View.extend({
             var html = birdView.render().el;
            this.$el.append(html);
         }, this);
+        
+        return this;
+    },
+    
+    appear : function(){
+        this.$el.animate({marginLeft : '3px'}, 300, 'swing');
     }
 });
 
@@ -110,10 +116,11 @@ $(function(){
      
    app.birds.fetch();
    app.birds.on('sync', function(){
-       app.birdsView.render();
+       app.birdsView.render()
+         .appear();
    });   
    
-   $('#birdsContainer').animate({marginLeft : '3px'}, 300, 'swing'); 
+    
     
 });
 
