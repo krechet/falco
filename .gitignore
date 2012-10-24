@@ -12,5 +12,4 @@ logs
 results
 
 node_modules/express
-public/images/birds
 npm-debug.log
