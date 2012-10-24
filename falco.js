@@ -9,7 +9,7 @@ var express = require('express')
   
 var mongoose = require('mongoose');
 
-global.db = mongoose.createConnection('localhost', 'test');  
+global.db = mongoose.createConnection('user:mongo-krech-1@ds039447.mongolab.com:39447/birds'/*, 'test'*/);  
 
 global.passport = require('passport')
 , LocalStrategy = require('passport-local').Strategy;
