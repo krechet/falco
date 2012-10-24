@@ -37,6 +37,13 @@ BirdView = Backbone.View.extend({
                 this.model.destroy();
                 this.remove();
             }
+        },
+        'click' : function(){
+            //route
+            $('#birdsContainer').animate({marginLeft : '-940px'}, 300, 'swing', function(){
+                this.css('margin-left', '940px')
+                    .css('display','none');
+            }); 
         }
     },
     
@@ -106,8 +113,7 @@ $(function(){
        app.birdsView.render();
    });   
    
-    
-    console.log('loaded');
+   $('#birdsContainer').animate({marginLeft : '3px'}, 300, 'swing'); 
     
 });
 
