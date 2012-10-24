@@ -34,8 +34,8 @@ exports.add = function(req, res){
     fName += '.'+ext;
     
     if(isValidImageExt(ext)){
-        placeImage( req.files.img.path, fName, req.body.gravity, item.image );
-        item.image = fName;
+        placeImage( req.files.img.path, fName, req.body.gravity );
+        bird.image = fName;
     }                   
     
 
