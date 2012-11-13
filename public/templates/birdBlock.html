@@ -1,0 +1,13 @@
+<div style='height:120; width:200; background:url(/images/birds/th_<%= image %>) no-repeat'>
+    <img style='z-index:100' src='/images/frame120.png'/></div>
+        <table class='birdProps'>
+        <tr><td>Order</td><td><%= order %></td></tr>
+        <tr><td>Family</td><td><%= family %></td></tr>
+        <tr><td>Genus</td><td><%= genus %></td></tr>
+        <tr><td>Subgenus</td><td><%= subgenus %></td></tr>
+        <tr><td>Species</td><td><%= species %></td></tr></table>
+        <div class='itemOps'>
+<a href='javascript:void(0)' class='delBird'>del</a>
+<a href='/birds/<%= _id %>/edit' class='editlBird'>edt</a>
+    </div>
+    <div class='birdName'><%= name %></div>

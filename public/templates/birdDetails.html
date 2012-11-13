@@ -1,0 +1,40 @@
+<style>
+    #detailsHolder {
+        width: 929px;
+       /* height: 500px;*/
+        /*        background-color: #eeeeee;*/
+    }
+
+    #bdDescription {
+        font-size : 11px;
+        color : #000000;
+        line-height: 160%;
+        clear : both;
+        /*	-moz-column-count: 3;
+                -moz-column-gap: 20px;
+                -webkit-column-count: 3;
+                -webkit-column-gap: 20px;
+                column-count: 3;
+                column-gap: 20px;
+                column-width: 100px;*/
+    }
+    
+	.column *{ padding: 5px;}
+
+
+		/*.wide, .thin { clear:both; }*/
+		/*img{ float: left; padding:5px;}*/
+		blockquote { font-style: italic; margin-left: 10px; border-left:2px solid #EFEFEF; padding-left: 8px;}
+</style>
+
+
+<div id="detailsHolder">
+    <div id="bdDescription">
+    <img src="/images/birds/th_<%= image %>" />
+    <h4><%= name %></h4>
+        <p>
+            <%= description %>
+        </p>
+    </div>
+</div>
+

@@ -1,6 +1,34 @@
 
 var app = app || {};
 
+
+_.render = 
+
+function renderTpl(tmpl_name, tmpl_data) {
+    if ( !_.render.tmpl_cache ) { 
+        _.render.tmpl_cache = {};
+    }
+
+    if ( ! _.render.tmpl_cache[tmpl_name] ) {
+        var tmpl_dir = '/templates';
+        var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
+
+        var tmpl_string;
+        $.ajax({
+            url: tmpl_url,
+            method: 'GET',
+            async: false,
+            success: function(data) {
+                tmpl_string = data;
+            }
+        });
+
+        _.render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
+    }
+
+    return _.render.tmpl_cache[tmpl_name](tmpl_data);
+}
+
 BirdModel = Backbone.Model.extend({
     defaults : {
         name : '',
@@ -9,7 +37,8 @@ BirdModel = Backbone.Model.extend({
         subgenus : '',
         family : '',
         species : '',
-        image : ''
+        image : '',
+        description : ''
     },
     
     idAttribute : '_id'
@@ -24,6 +53,7 @@ BirdsCollection = Backbone.Collection.extend({
     initialize : function(){
     }
 });
+
 
 BirdView = Backbone.View.extend({
     
@@ -51,25 +81,45 @@ BirdView = Backbone.View.extend({
         });*/
     },
     
-    tpl : _.template("<div style='height:120; width:200;background:url(/images/birds/th_<%= image %>) no-repeat'><img style='z-index:100' src='/images/frame120.png'></div>\
-        <table class='birdProps'>\
-        <tr><td>Order</td><td><%= order %></td></tr>\
-        <tr><td>Family</td><td><%= family %></td></tr>\
-        <tr><td>Genus</td><td><%= genus %></td></tr>\
-        <tr><td>Subgenus</td><td><%= subgenus %></td></tr>\
-        <tr><td>Species</td><td><%= species %></td></tr></table>\
-        <div class='itemOps'>\
-<a href='javascript:void(0)' class='delBird'>del</a>\
-<a href='/birds/<%= _id %>/edit' class='editlBird'>edt</a>\
-    </div>\
-    <div class='birdName'><%= name %></div>\
-        "
-        ),
-    
     render : function(){
-        this.$el.html(this.tpl(this.model.toJSON())); 
+//        this.$el.html(this.tpl(this.model.toJSON())); 
+        this.$el.html(_.render('birdBlock',this.model.toJSON())); 
         return this;
     }
+});
+
+
+
+BirdDetailsView = Backbone.View.extend({
+    el : '#birdDetails',
+   
+    initialize : function(){
+        _.bindAll(this, 'render', 'modelChange');
+       
+        BirdDetailsModel = Backbone.Model.extend({
+            urlRoot : '/birds',
+            idAttribute : '_id'
+        });       
+        
+        this.model = new BirdDetailsModel();
+        this.model.on('sync', this.modelChange );
+    },
+
+    modelChange : function(){
+        this.render();  
+    },
+
+    render : function(){
+        this.$el.html(_.render('birdDetails',this.model.toJSON()));
+        $('h2').addClass('dontend');
+        $('#bdDescription').columnize({ width:240, lastNeverTallest: true });
+        return this;
+    },
+   
+    show : function(){
+        app.view.show('birdDetails');
+    }
+   
 });
 
 BirdsView = Backbone.View.extend({
@@ -77,7 +127,7 @@ BirdsView = Backbone.View.extend({
     
 
     
-    init : function(){
+    initialize : function(){
         _.bindAll(this,'render');
         
     //        this.on('click .delBird', function(){ console.log('del');})
@@ -113,9 +163,10 @@ var AppView = Backbone.View.extend({
         
         var m = '0px';
         if(mode=='birdList')
-            m = '0px';
-        else if(mode=='birdDetails')
-            m = '-934px';
+            m = '1px';
+        else if(mode=='birdDetails'){
+            m = '-933px';
+        }
         
         $('#birdsContainer').animate({
             marginLeft : m
@@ -136,7 +187,12 @@ var AppRouter = Backbone.Router.extend({
     },
     
     showBird : function(id){
-        app.view.show('birdDetails');
+        app.birdDetailsView.model.set({_id:id});
+        app.birdDetailsView.model.fetch({
+            async:false
+        });
+        app.birdDetailsView.show();
+        
     }
 });
 
@@ -149,6 +205,8 @@ $(function(){
     
     app.birds = new BirdsCollection(); 
     app.birdsView = new BirdsView();
+    
+    app.birdDetailsView = new BirdDetailsView();
 
     app.birds.on('sync', function(){
         app.birdsView.render();
