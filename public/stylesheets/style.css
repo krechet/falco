@@ -14,9 +14,21 @@ a {
 }
 
 #birdsContainer {
-    width: 933px;
+    width: 1900px;
     float : left;
     margin-left : 939px;
+}
+
+#birdList {
+    width: 933px;
+    float: left;
+/*    outline: 1px dotted red;*/
+}
+
+#birdDetails {
+    width: 933px;
+    float: left;
+/*    outline: 1px dotted red;*/
 }
 
 .birdBlock {

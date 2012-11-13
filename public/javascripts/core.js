@@ -39,16 +39,13 @@ BirdView = Backbone.View.extend({
             }
         },
         'click' : function(){
-            //route
-            $('#birdsContainer').animate({marginLeft : '-940px'}, 300, 'swing', function(){
-                this.css('margin-left', '940px')
-                    .css('display','none');
-            }); 
+
+            window.location.href = '#/birds/'+this.model.id;
         }
     },
     
     init : function(){
-/*        this.model.on('destroy', function(){
+    /*        this.model.on('destroy', function(){
             console.log('removing element');
             this.remove();
         });*/
@@ -70,57 +67,100 @@ BirdView = Backbone.View.extend({
         ),
     
     render : function(){
-       this.$el.html(this.tpl(this.model.toJSON())); 
-       return this;
+        this.$el.html(this.tpl(this.model.toJSON())); 
+        return this;
     }
 });
 
 BirdsView = Backbone.View.extend({
-    el : '#birdsContainer',
+    el : '#birdList',
     
 
     
     init : function(){
         _.bindAll(this,'render');
         
-//        this.on('click .delBird', function(){ console.log('del');})
+    //        this.on('click .delBird', function(){ console.log('del');})
     },
     
     
     
     render : function(){
         _(app.birds.models).each(function(item){
-            var birdView = new BirdView({model:item});
+            var birdView = new BirdView({
+                model:item
+            });
             var html = birdView.render().el;
-           this.$el.append(html);
+            this.$el.append(html);
         }, this);
         
         return this;
     },
     
-    appear : function(){
-        this.$el.animate({marginLeft : '3px'}, 300, 'swing');
+    show : function(){
+        app.view.show('birdList');
+        return this;
     }
+
 });
 
 var AppView = Backbone.View.extend({
         
-    el : '#contentContainer'
+    el : '#contentContainer',
+    
+    show : function(mode){
+        // get offset of the div
+        
+        var m = '0px';
+        if(mode=='birdList')
+            m = '0px';
+        else if(mode=='birdDetails')
+            m = '-934px';
+        
+        $('#birdsContainer').animate({
+            marginLeft : m
+        }, 300, 'swing');
+    }
     
 });
 
+var AppRouter = Backbone.Router.extend({
+    routes: {
+        "birds/:id": "showBird",
+        "" : "index",
+        "*actions": "defaultRoute" // Backbone will try match the route above first
+    },
+    
+    index : function(){
+        app.birdsView.show();    
+    },
+    
+    showBird : function(id){
+        app.view.show('birdDetails');
+    }
+});
+
+
 $(function(){
     
-   app.birds = new BirdsCollection(); 
-   app.birdsView = new BirdsView();
-     
-   app.birds.fetch();
-   app.birds.on('sync', function(){
-       app.birdsView.render()
-         .appear();
-   });   
+    app.view = new AppView();
    
+
     
+    app.birds = new BirdsCollection(); 
+    app.birdsView = new BirdsView();
+
+    app.birds.on('sync', function(){
+        app.birdsView.render();
+         
+    });   
+     
+    app.birds.fetch({
+        async:false
+    });
+    
+    app.router = new AppRouter;
+    Backbone.history.start();
     
 });
 
