@@ -4,30 +4,30 @@ var app = app || {};
 
 _.render = 
 
-function renderTpl(tmpl_name, tmpl_data) {
-    if ( !_.render.tmpl_cache ) { 
-        _.render.tmpl_cache = {};
+    function renderTpl(tmpl_name, tmpl_data) {
+        if ( !_.render.tmpl_cache ) { 
+            _.render.tmpl_cache = {};
+        }
+
+        if ( ! _.render.tmpl_cache[tmpl_name] ) {
+            var tmpl_dir = '/templates';
+            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
+
+            var tmpl_string;
+            $.ajax({
+                url: tmpl_url,
+                method: 'GET',
+                async: false,
+                success: function(data) {
+                    tmpl_string = data;
+                }
+            });
+
+            _.render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
+        }
+
+        return _.render.tmpl_cache[tmpl_name](tmpl_data);
     }
-
-    if ( ! _.render.tmpl_cache[tmpl_name] ) {
-        var tmpl_dir = '/templates';
-        var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
-
-        var tmpl_string;
-        $.ajax({
-            url: tmpl_url,
-            method: 'GET',
-            async: false,
-            success: function(data) {
-                tmpl_string = data;
-            }
-        });
-
-        _.render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
-    }
-
-    return _.render.tmpl_cache[tmpl_name](tmpl_data);
-}
 
 BirdModel = Backbone.Model.extend({
     defaults : {
@@ -62,10 +62,13 @@ BirdView = Backbone.View.extend({
     model : BirdModel,
     
     events : {
-        'click .delBird' : function(){ 
+        'click .delBird' : function(e){ 
+            e.stopPropagation();
             if(confirm('Delete?')){
                 this.model.destroy();
                 this.remove();
+                app.birdsView.show();            
+                
             }
         },
         'click' : function(){
@@ -82,7 +85,7 @@ BirdView = Backbone.View.extend({
     },
     
     render : function(){
-//        this.$el.html(this.tpl(this.model.toJSON())); 
+        //        this.$el.html(this.tpl(this.model.toJSON())); 
         this.$el.html(_.render('birdBlock',this.model.toJSON())); 
         return this;
     }
@@ -112,7 +115,10 @@ BirdDetailsView = Backbone.View.extend({
     render : function(){
         this.$el.html(_.render('birdDetails',this.model.toJSON()));
         $('h2').addClass('dontend');
-        $('#bdDescription').columnize({ width:240, lastNeverTallest: true });
+        $('#bdDescription').columnize({
+            width:240, 
+            lastNeverTallest: true
+        });
         return this;
     },
    
@@ -187,7 +193,9 @@ var AppRouter = Backbone.Router.extend({
     },
     
     showBird : function(id){
-        app.birdDetailsView.model.set({_id:id});
+        app.birdDetailsView.model.set({
+            _id:id
+        });
         app.birdDetailsView.model.fetch({
             async:false
         });
