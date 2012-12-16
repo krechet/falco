@@ -14,7 +14,7 @@ var connString = process.env.mongolabConnString;
 global.db = mongoose.createConnection(connString);  
 
 global.passport = require('passport')
-, LocalStrategy = require('passport-local').Strategy;
+    , LocalStrategy = require('passport-local').Strategy;
 
 
 
@@ -60,7 +60,7 @@ app.configure('development', function(){
     db.on('error', console.error.bind(console, 'connection error:'));
 });
 
-var noAuth = true;
+var noAuth = false;
 
 function requireRole(role) {
     return function(req, res, next) {
@@ -77,7 +77,6 @@ app.get('/', routes.index);
 app.del('/birds/:id', requireRole('admin'), birds.del);
 
 
-
 app.post('/birds', requireRole('admin'), birds.add);
 app.put('/birds/:id', requireRole('admin'), birds.edit);
 
@@ -91,12 +90,16 @@ app.get('/birds', birds.getAll);
 
 app.post('/login',
     passport.authenticate('local', {
-        failureRedirect: '/login', 
-        failureFlash: true
-    }),
+        //     failureRedirect: '/login', 
+        //     failureFlash: true
+        }),
     function(req, res) {
-        res.redirect('/');
+      res.send(req.user);
     });
+    
+app.get('/user', function(req,res){
+    res.send({user:req.user});
+});
   
 app.get('/login', function(req, res){
     res.render('login', {
@@ -107,7 +110,8 @@ app.get('/login', function(req, res){
   
 app.get('/logout', function(req, res){
     req.logout();
-    res.redirect('/');
+    res.send({result:'ok'});
+//    res.redirect('/');
 });
 
 http.createServer(app).listen(app.get('port'), function(){

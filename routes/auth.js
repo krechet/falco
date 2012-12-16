@@ -5,14 +5,14 @@ var users = [
 {
     id: 1, 
     username: 'user', 
-    password: '0cc175b9c0f1b6a831c399e269772661', 
+    password: '202cb962ac59075b964b07152d234b70', 
     email: 'a@example.com', 
     role : 'user'
 }
 , {
     id: 2, 
     username: 'admin', 
-    password: '92eb5ffee6ae2fec3ad71c777531578f', 
+    password: '202cb962ac59075b964b07152d234b70', 
     email: 'b@example.com', 
     role : 'admin'
 }

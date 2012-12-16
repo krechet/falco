@@ -1,10 +1,10 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 #contentContainer {
@@ -22,13 +22,13 @@ a {
 #birdList {
     width: 933px;
     float: left;
-/*    outline: 1px dotted red;*/
+    /*    outline: 1px dotted red;*/
 }
 
 #birdDetails {
     width: 933px;
     float: left;
-/*    outline: 1px dotted red;*/
+    /*    outline: 1px dotted red;*/
 }
 
 .birdBlock {
@@ -48,12 +48,12 @@ a {
     background-color : #f0f0fc;
 }
 
-.birdBlock:hover .itemOps {
+/*.birdBlock:hover .itemOps {
     display: block;
 }
-
+*/
 .itemOps {
- 
+
     font-size: 10px; height:16px; width:50px; position:absolute; left:150px; top:0; z-index:2;
     display : none;
 }
@@ -74,6 +74,16 @@ a {
     margin :20px auto;
 }
 
+
 .itemOps a {
     margin-right:3px;
+}
+
+#login input {
+    width : 70px;
+    font-size : 11px;
+}
+
+#login {
+    font-size : 11px;
 }
