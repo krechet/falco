@@ -1,7 +1,9 @@
 require('../models/bird');
 var fs = require('fs'),
 idgen = require('idgen'),
-im = require('imagemagick');
+im = require('imagemagick'),
+// async = require('async'),
+Seq = require('seq');
 
 Array.prototype.contains = function(obj) {
     var i = this.length;
@@ -33,21 +35,36 @@ exports.add = function(req, res){
                         
     fName += '.'+ext;
     
-    if(isValidImageExt(ext)){
-        placeImage( req.files.img.path, fName, req.body.gravity );
-        bird.image = fName;
-    }                   
-    
-
-    bird.save(function(err,item){
-        if(err){
-            res.send({
-                err:err
-            });
-        }else {
-            res.redirect('/');
-        }
+    Seq()
+    .seq(function(){
+        var back = this;
+        if(isValidImageExt(ext)){
+            placeImage( req.files.img.path, fName, req.body.gravity, null, function(){
+                bird.image = fName;
+                bird.img.contentType = 'image/'+ext;
+                bird.img.data = fs.readFileSync(__dirname+'/../public/images/birds/th_'+fName);
+                back();
+            } );
+        }else
+            back();
+    })
+    .seq(function(){
+        console.log(bird);
+        bird.save(function(err,item){
+            if(err){
+                res.send({
+                    err:err
+                });
+            }else {
+                fs.unlink(__dirname+'/../public/images/birds/'+fName, function(err){});
+                fs.unlink(__dirname+'/../public/images/birds/th_'+fName, function(err){});
+                res.redirect('/');
+            }
+        });
+        this();
     });
+    
+    
 
 }
 
@@ -55,7 +72,7 @@ exports.get = function(req, res){
     
     var bird = db.model('Bird',BirdSchema);
     
-    bird.findById(req.params.id, function(err, item){
+    bird.findById(req.params.id, '-img', function(err, item){
         if(err){ 
             res.send({
                 err:err
@@ -72,11 +89,33 @@ exports.get = function(req, res){
     
 }
 
+exports.getImage = function(req, res){
+    var bird = db.model('Bird',BirdSchema);
+    
+    bird.findById(req.params.id, function(err, item){
+        if(err){ 
+            res.send({
+                err:err
+            });
+            return;
+        }
+        if(item){
+            res.setHeader("Content-Type", item.img.contentType);
+            res.send(item.img.data);
+        }
+        else
+            res.send({
+                'err' : 'not found'
+            });
+    } );
+    
+}
+
 exports.getAll = function(req, res){
     
     var bird = db.model('Bird',BirdSchema);
     
-    bird.find({}, function(err, items){
+    bird.find({},'-description -img', function(err, items){
         if(err){
             res.send({
                 err:err
@@ -116,11 +155,11 @@ exports.del = function(req, res){
             }
     
             if(item){
-                if(item.image){
+                /*                if(item.image){
                     fs.unlink(__dirname+'/../public/images/birds/'+item.image, function(err){});
                     fs.unlink(__dirname+'/../public/images/birds/th_'+item.image, function(err){});
                 }
-    
+  */  
                 item.remove();  
                 res.send({
                     status:'ok'
@@ -134,12 +173,12 @@ exports.del = function(req, res){
     
 }
 
-placeImage = function(fileName, storeName, gravity, oldName){
+placeImage = function(fileName, storeName, gravity, oldName, cb){
     
     if(fileName && fileName!='' && storeName && storeName!=''){
         
         
-/*        fs.exists(__dirname + '/../public/images/birds',function(exists){
+        /*        fs.exists(__dirname + '/../public/images/birds',function(exists){
             if(!exists){
                 fs.mkdir(__dirname+'/../public/images/birds2');
             }
@@ -166,9 +205,13 @@ placeImage = function(fileName, storeName, gravity, oldName){
                 }
                 fs.rename(fileName, __dirname+'/../public/images/birds/'+storeName);
                 //delete prev files
-                if(oldName){
+                /*               if(oldName){
                     fs.unlink(__dirname+'/../public/images/birds/'+oldName, function(err){});
                     fs.unlink(__dirname+'/../public/images/birds/th_'+oldName, function(err){});    
+                }*/
+                if(typeof(cb)==='function'){
+                    console.log('calling callback');
+                    cb();
                 }
                     
                             
@@ -204,15 +247,29 @@ exports.edit = function(req, res){
                     var ext = match[1];
                         
                     fName += '.'+ext;
-                    
-                    if(isValidImageExt(ext)){
-                        placeImage( req.files.img.path, fName, req.body.gravity, item.image );
-                        item.image = fName;
-                    }
-                        
-                    item.save(function(){
-                        res.redirect('/'/*+item._id.toHexString()*/);
+
+                    Seq()
+                    .seq(function(){
+                        var back = this;
+                        if(isValidImageExt(ext)){
+                            placeImage( req.files.img.path, fName, req.body.gravity, null, function(){
+                                console.log('saving image');
+                                item.img.contentType = 'image/'+ext;
+                                item.img.data = fs.readFileSync(__dirname+'/../public/images/birds/th_'+fName);                           
+                                item.image = fName;
+                                back();
+                            } );
+                        }
+                        else
+                            back();
+                    })
+                    .seq(function(){
+                        item.save(function(){
+                            res.redirect('/'/*+item._id.toHexString()*/);
+                        });
+                        this();
                     });
+                        
                 }
             });
         }

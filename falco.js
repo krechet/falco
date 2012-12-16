@@ -80,6 +80,7 @@ app.put('/birds/:id', requireRole('admin'), birds.edit);
 
 app.get('/birds/new', requireRole('admin'), birds.newForm);
 app.get('/birds/:id/edit', requireRole('admin'), birds.editForm);
+app.get('/birds/:id/image', birds.getImage);
 app.get('/birds/:id', birds.get);
 app.get('/birds', birds.getAll);
 
