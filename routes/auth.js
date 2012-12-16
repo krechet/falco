@@ -12,7 +12,7 @@ var users = [
 , {
     id: 2, 
     username: 'admin', 
-    password: '202cb962ac59075b964b07152d234b70', 
+    password: '04f3e7d43c9cc23764bfde148d7c80f4', 
     email: 'b@example.com', 
     role : 'admin'
 }
