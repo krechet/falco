@@ -5,11 +5,13 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , util = require('util')
-, flash = require('connect-flash');
+, flash = require('connect-flash')
+;
   
 var mongoose = require('mongoose');
 
-global.db = mongoose.createConnection('user:mongo-krech-1@ds039447.mongolab.com:39447/birds'/*, 'test'*/);  
+var connString = process.env.mongolabConnString;
+global.db = mongoose.createConnection(connString);  
 
 global.passport = require('passport')
 , LocalStrategy = require('passport-local').Strategy;
@@ -50,6 +52,7 @@ app.configure(function(){
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
+
 
 
 app.configure('development', function(){
