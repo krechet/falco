@@ -9,7 +9,7 @@ a {
 
 #contentContainer {
     margin : 5px auto;
-    width : 934px;
+    width : 874px;
     overflow: hidden;
 }
 
@@ -20,8 +20,10 @@ a {
 }
 
 #birdList {
-    width: 933px;
+/*    width: 873px;*/
     float: left;
+    height: 560px;
+    
     /*    outline: 1px dotted red;*/
 }
 
@@ -86,4 +88,19 @@ a {
 
 #login {
     font-size : 11px;
+}
+
+#blPaginator {
+    text-align: right;
+}
+
+#blContainer {
+    height : 560px;
+    width : 873px;
+    overflow: hidden;
+}
+
+#birdListContainer {
+    width: 874px;
+    float : left;
 }

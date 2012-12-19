@@ -142,25 +142,90 @@ BirdDetailsView = Backbone.View.extend({
 BirdsView = Backbone.View.extend({
     el : '#birdList',
     
-
+    curPage : 0,
+    totalPages : 0,
     
     initialize : function(){
-        _.bindAll(this,'render');
+        _.bindAll(this,'render','getModelMetrics');
         
-    //        this.on('click .delBird', function(){ console.log('del');})
+        app.birds.on('reset', this.getModelMetrics);
+        
+        $('.pgnPrev').click($.proxy(this.prevPage, this));
+        $('.pgnNext').click($.proxy(this.nextPage, this));
+        
     },
     
+    events : {
+        "click .pgnNext" : "nextPage",
+        "click .pgnPrev" : "prevPage"
+    },
+
+    getModelMetrics : function(){
+        var cnt = app.birds.models.length; 
+        this.curPage = 0;
+        this.totalPages = Math.ceil(cnt/8);
+    },
     
+    showCurrentPage : function(){
+        var m = -874*this.curPage+'px';
+        
+        $("#birdList").animate({
+            marginLeft : m
+        }, 300, 'swing');        
+        
+        window.location.href = '#/page/'+this.curPage;
+    },
+    
+    nextPage : function(){
+        this.curPage++;
+        if(this.curPage>=this.totalPages)
+            this.curPage = this.totalPages-1;
+        
+        this.showCurrentPage();
+        
+    },
+    
+    prevPage : function(){
+        this.curPage--;
+        if(this.curPage<0)
+            this.curPage = 0;
+        
+        this.showCurrentPage();
+    },
     
     render : function(){
+        
+        this.$el.html('');
+        
+        /*        for(var i=this.curPage*8; i<(this.curPage+1)*8 && i<app.birds.models.length; i++){
+            var birdView = new BirdView({
+                model:app.birds.models[i]
+            });
+            var html = birdView.render().el;
+            this.$el.append(html);
+          
+        }
+  */      
+        this.$el.css('width',256*app.birds.models.length + 'px');
+        
+        var board = $("<div style='float:left;width:874px;height:560px;'></div>");
+        
+        var cnt = 0;
+        
         _(app.birds.models).each(function(item){
             var birdView = new BirdView({
                 model:item
             });
             var html = birdView.render().el;
-            this.$el.append(html);
+            //            this.$el.append(html);
+            board.append(html);
+            if(++cnt>7){
+                this.$el.append(board);
+                board = $("<div style='float:left;width:874px;height:560px;'></div>");
+            }
         }, this);
         
+        // this.$el.append(board);
         return this;
     },
     
@@ -261,7 +326,7 @@ var AppView = Backbone.View.extend({
         if(mode=='birdList')
             m = '1px';
         else if(mode=='birdDetails'){
-            m = '-933px';
+            m = '-874px';
         }
         
         $('#birdsContainer').animate({
@@ -274,12 +339,22 @@ var AppView = Backbone.View.extend({
 var AppRouter = Backbone.Router.extend({
     routes: {
         "birds/:id": "showBird",
+        
+        "page/:n" : "gotoPage",
         "" : "index",
+
         "*actions": "defaultRoute" // Backbone will try match the route above first
     },
     
     index : function(){
         app.birdsView.show();    
+    },
+    
+    gotoPage : function(n){
+        app.birdsView.curPage = n;
+        app.birdsView.showCurrentPage();
+//        app.birdsView.render();
+        app.birdsView.show();
     },
     
     showBird : function(id){

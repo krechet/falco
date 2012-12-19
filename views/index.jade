@@ -1,9 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  #contentContainer
-    #birdsContainer
-      #birdList
-      #birdDetails
+    h1= title
+    p Welcome to #{title}
+    #contentContainer
+        #birdsContainer
+            #birdListContainer
+                #blPaginator
+                    a(href="javascript:void(0);",class="pgnPrev")='[Prev]'
+                    a(href="javascript:void(0);",class="pgnNext")='[Next]'
+                #blContainer
+                    #birdList
+            #birdDetails
