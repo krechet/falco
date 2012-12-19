@@ -353,17 +353,19 @@ var AppRouter = Backbone.Router.extend({
     gotoPage : function(n){
         app.birdsView.curPage = n;
         app.birdsView.showCurrentPage();
-//        app.birdsView.render();
+        //        app.birdsView.render();
         app.birdsView.show();
     },
     
     showBird : function(id){
-        app.birdDetailsView.model.set({
-            _id:id
-        });
-        app.birdDetailsView.model.fetch({
-            async:false
-        });
+        if(app.birdDetailsView.model.get('_id') != id){
+            app.birdDetailsView.model.set({
+                _id:id
+            });
+            app.birdDetailsView.model.fetch({
+                async:false
+            });
+        }
         app.birdDetailsView.show();
         
     }
