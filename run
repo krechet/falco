@@ -1,0 +1,1 @@
+nodemon falco.js -w models/ -w routes/ -w ./

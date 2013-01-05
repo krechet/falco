@@ -9,7 +9,8 @@ var AppRouter = Backbone.Router.extend({
     },
     
     index : function(){
-        app.birdsView.show();    
+        this.gotoPage(0);
+//        app.birdsView.show();    
     },
     
     gotoPage : function(n){
