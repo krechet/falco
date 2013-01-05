@@ -115,7 +115,7 @@ exports.getAll = function(req, res){
     
     var bird = db.model('Bird',BirdSchema);
     
-    bird.find({},'-description -img', function(err, items){
+    bird.find({},'-description -img', {sort:{name:1}}, function(err, items){
         if(err){
             res.send({
                 err:err

@@ -81,8 +81,11 @@ BirdsView = Backbone.View.extend({
             if(++cnt>7){
                 this.$el.append(board);
                 board = $("<div style='float:left;width:874px;height:560px;'></div>");
+                cnt = 0;
             }
         }, this);
+        
+        this.$el.append(board);
         
         // this.$el.append(board);
         return this;
