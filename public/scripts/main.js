@@ -15,10 +15,16 @@ $(function(){
         app.birdsView.render();
          
     });   
+    
+    app.loader = new AjaxLoader();
+    
+    app.loader.show();
      
     app.birds.fetch({
         async:false
     });
+    
+    app.loader.hide();
     
     app.router = new AppRouter;
     Backbone.history.start();

@@ -104,3 +104,10 @@ a {
     width: 874px;
     float : left;
 }
+
+#ajaxLoader {
+    z-index : 100;
+    position : absolute;
+    left: 50%;
+    top: 50%;
+}

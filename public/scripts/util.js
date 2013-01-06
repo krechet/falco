@@ -24,5 +24,10 @@ _.render =
 
         return _.render.tmpl_cache[tmpl_name](tmpl_data);
     }
+    
+function sleep(ms) {
+    ms += new Date().getTime();
+    while (new Date() < ms){}
+}; 
 
 
