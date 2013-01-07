@@ -9,7 +9,8 @@ global.BirdSchema = new mongoose.Schema({
     species : {type:String, required : true, match : /^[\s\S]{0,50}$/},
     image : String,
     description : String,
-    img : { data: Buffer, contentType: String }
+    img : { data: Buffer, contentType: String },
+    ranges : {type:String}
 });
 
 mongoose.model('Bird', BirdSchema);

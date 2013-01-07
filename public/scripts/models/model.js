@@ -7,7 +7,8 @@ BirdModel = Backbone.Model.extend({
         family : '',
         species : '',
         image : '',
-        description : ''
+        description : '',
+        ranges : ''
     },
     
     idAttribute : '_id'

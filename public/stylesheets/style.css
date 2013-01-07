@@ -111,3 +111,9 @@ a {
     left: 50%;
     top: 204px;
 }
+
+#edMap {
+    width: 500px;
+    height: 250px;
+    border: 1px red dotted;
+}

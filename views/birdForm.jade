@@ -1,3 +1,8 @@
+link(rel='stylesheet', href='/stylesheets/style.css')
+script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js')
+script(src='http://openlayers.org/dev/OpenLayers.js')
+script(src='/scripts/mapper.js')
+script(src='/scripts/birdForm.js')
 p
   label(for='name') Name:
 p 
@@ -34,6 +39,13 @@ p
   label(for='description') Description:
 p
   textarea(name='description')=bird.description
+p Range
+p 
+    #edMap
+    a(onClick='app.mapper.clear()', href='javascript:void(0)') [CLEAR]
+p
+    input(type='hidden', name='ranges', id='ranges', value=bird.ranges)
+        
 p
   input(type='submit')  
 

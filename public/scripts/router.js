@@ -23,6 +23,7 @@ var AppRouter = Backbone.Router.extend({
     showBird : function(id){
         if(app.birdDetailsView.model.get('_id') != id){
             app.loader.showRelative('bb'+id);
+            app.birdDetailsView.model.clear({silent:true});
             app.birdDetailsView.model.set({
                 _id:id
             });
