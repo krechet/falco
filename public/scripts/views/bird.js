@@ -1,48 +1,55 @@
-BirdView = Backbone.View.extend({
+define([
+    'backbone',
+    'models/model',
+    'text!templates/birdBlock.html'
+    ], function(Backbone, BirdDetailsModel, BirdBlockTpl){
+
+        BirdView = Backbone.View.extend({
     
-    tagName : 'div',
-    className : 'birdBlock',
-    model : BirdModel,
+            tagName : 'div',
+            className : 'birdBlock',
+            model : BirdModel,
     
-    events : {
-        'click .delBird' : function(e){ 
-            e.stopPropagation();
-            if(confirm('Delete?')){
-                this.model.destroy();
-                this.remove();
-                app.birdsView.show();            
+            events : {
+                'click .delBird' : function(e){ 
+                    e.stopPropagation();
+                    if(confirm('Delete?')){
+                        this.model.destroy();
+                        this.remove();
+                        app.birdsView.show();            
                 
-            }
-        },
-        'click .editBird' : function(e){
-            e.stopPropagation();
-            window.location.href = '/birds/'+this.model.id+'/edit'
-        },
-        'click' : function(e){
-            window.location.href = '#/birds/'+this.model.id;
-        },
-        'mouseenter' : function(e){
-            if(app.loginView.user.role=='admin')
-                $(this.$el).find('.itemOps').css('display','block');
-        },
-        'mouseleave' : function(e){
-            $(this.$el).find('.itemOps').css('display','none');
-        }
-    },
+                    }
+                },
+                'click .editBird' : function(e){
+                    e.stopPropagation();
+                    window.location.href = '/birds/'+this.model.id+'/edit'
+                },
+                'click' : function(e){
+                    window.location.href = '#/birds/'+this.model.id;
+                },
+                'mouseenter' : function(e){
+                    if(app.loginView.user.role=='admin')
+                        $(this.$el).find('.itemOps').css('display','block');
+                },
+                'mouseleave' : function(e){
+                    $(this.$el).find('.itemOps').css('display','none');
+                }
+            },
     
-    init : function(){
-    /*        this.model.on('destroy', function(){
+            init : function(){
+            /*        this.model.on('destroy', function(){
             console.log('removing element');
             this.remove();
         });*/
-    },
+            },
     
-    render : function(){
-        //        this.$el.html(this.tpl(this.model.toJSON())); 
-        this.$el.html(_.render('birdBlock',this.model.toJSON())); 
-        this.delegateEvents();
-        return this;
-    }
-});
+            render : function(){
+                this.$el.html(_.template(BirdBlockTpl,this.model.toJSON())); 
+                this.delegateEvents();
+                return this;
+            }
+        });
 
+        return BirdView;
+    });
 

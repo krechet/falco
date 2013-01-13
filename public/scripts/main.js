@@ -1,34 +1,34 @@
-$(function(){
-    
-    app.view = new AppView();
-   
-    app.loginView = new LoginView();
-    app.loginView.check();
-    app.loginView.render();
-    
-    app.birds = new BirdsCollection(); 
-    app.birdsView = new BirdsView();
-    
-    app.birdDetailsView = new BirdDetailsView();
+requirejs.config({
+    shim: {
+        'backbone': {
+            //These script dependencies should be loaded before loading
+            //backbone.js
+            deps: ['underscore', 'jquery'],
+            //Once loaded, use the global 'Backbone' as the
+            //module value.
+            exports: 'Backbone'
+        }
+    }
+    ,
+    paths: {
+        jquery: 'libs/jquery-1.8.3.min',
+        underscore: 'libs/underscore-min',
+        backbone: 'libs/backbone-min',
+        openlayers: 'libs/OpenLayers',
+        templates: 'templates'
+    }
 
-    app.birds.on('sync', function(){
-        app.birdsView.render();
-         
-    });   
-    
-    app.loader = new AjaxLoader();
-    
-    app.loader.show();
-     
-    app.birds.fetch({
-        async:false
+});
+
+requirejs([
+    'app',
+    ], function(App){
+        App.initialize();
     });
+
+    /*$(function(){
     
-    app.loader.hide();
-    
-    app.router = new AppRouter;
-    Backbone.history.start();
     
     
 });
-
+     */

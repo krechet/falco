@@ -1,15 +1,22 @@
-BirdModel = Backbone.Model.extend({
-    defaults : {
-        name : '',
-        order : '',
-        genus : '',
-        subgenus : '',
-        family : '',
-        species : '',
-        image : '',
-        description : '',
-        ranges : ''
-    },
+define([
+    'backbone'
+    ], function(){
+
+        BirdModel = Backbone.Model.extend({
+            defaults : {
+                name : '',
+                order : '',
+                genus : '',
+                subgenus : '',
+                family : '',
+                species : '',
+                image : '',
+                description : '',
+                ranges : ''
+            },
     
-    idAttribute : '_id'
-});
+            idAttribute : '_id'
+        });
+
+        return BirdModel;
+    });

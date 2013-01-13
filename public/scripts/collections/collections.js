@@ -1,9 +1,17 @@
-BirdsCollection = Backbone.Collection.extend({
+define([
+    'backbone',
+    'models/model'
+    ], function(Backbone, BirdModel){
+
+        BirdsCollection = Backbone.Collection.extend({
     
-    model : BirdModel,
+            model : BirdModel,
     
-    url : '/birds',
+            url : '/birds',
     
-    initialize : function(){
-    }
-});
+            initialize : function(){
+            }
+        });
+
+        return BirdsCollection;
+    });
