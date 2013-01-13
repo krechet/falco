@@ -17,3 +17,4 @@ npm-debug.log
 *.js~
 push
 run
+mongo.conf
