@@ -1,10 +1,11 @@
 define([
+    'jquery',
     'backbone',
     'models/model',
     'text!templates/birdDetails.html',
     'libs/jquery.columnizer.min',
     'mapper'
-    ], function(Backbone,BirdDetailsModel, BirdDetailsTpl, Columnizer, Mapper){
+    ], function($,Backbone,BirdDetailsModel, BirdDetailsTpl, Columnizer, Mapper){
 
 
         BirdDetailsView = Backbone.View.extend({
